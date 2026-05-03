@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+  <title>Omega's Container Upgrades</title>
+  <id>omegaplatinum.elin.omegascontainerupgrades</id>
+  <author>OmegaPlatinum</author>
+  <loadPriority>100</loadPriority>
+  <description>
+    Expands container upgrade options for player-owned storage and the player inventory.
+    プレイヤー所有の収納とプレイヤーインベントリのアップグレード機能を拡張します。
+
+    [h1] Features [/h1]
+    [list]
+    [*] Lets width, height, storage, and cooling wrenches work on supported player-owned containers.
+    [*] Lets supported wrench upgrades target the player inventory.
+    [*] Removes the normal wrench upgrade limit for supported upgrade targets.
+    [*] Adds free middle-click context-menu actions for quick container resizing, cooling, and icon changes.
+    [/list]
+
+    [h1] Affected Containers [/h1]
+    This mod affects the player inventory and player-owned items that Elin treats as containers, including:
+    [list]
+    [*] Storage chests, cooler boxes, shipping chests, delivery boxes, salary chests, and offering boxes.
+    [*] Combustible waste boxes and non-combustible waste boxes.
+    [*] Common storage furniture such as wooden boxes, sturdy boxes, stone chests, treasure chests, barrels, lockers, cabinets, bookshelves, safes, shelves, racks, wardrobes, coffins, and caskets.
+    [*] Portable containers such as backpacks, bags, pouches, purses, quivers, piggy banks, and grimoires.
+    [/list]
+    Merchant chests, NPC property, and non-player-owned containers are not affected.
+
+    [h1] Usage [/h1]
+    Use supported wrenches on player-owned containers or the player inventory. Middle-click the player or a supported container to open the Container Upgrades context menu for free convenience changes.
+
+    [img] https://img.shields.io/badge/Supports%20Game%20Version-EA%2023.295%20Stable-green [/img]
+
+    [h1] 特徴 [/h1]
+    [list]
+    [*] 幅、高さ、収納、冷却のレンチを、対応するプレイヤー所有コンテナに使えるようにします。
+    [*] 対応するレンチアップグレードをプレイヤーインベントリにも適用できます。
+    [*] 対応するアップグレード対象では、通常のレンチアップグレード上限をなくします。
+    [*] コンテナのサイズ変更、冷却、アイコン変更をすばやく行える無料の中クリックコンテキストメニューアクションを追加します。
+    [/list]
+
+    [h1] 対象コンテナ [/h1]
+    このMODは、プレイヤーインベントリと、Elin がコンテナとして扱うプレイヤー所有アイテムに適用されます。対象には以下が含まれます。
+    [list]
+    [*] 収納箱、クーラーボックス、出荷箱、宅配ボックス、給料箱、賽銭箱。
+    [*] 燃えるゴミのコンテナ、燃えないゴミのコンテナ。
+    [*] 木箱、頑丈な箱、石の箱、宝箱、樽、ロッカー、箪笥、本棚、金庫、棚、ラック、ワードローブ、棺桶、小箱などの一般的な収納家具。
+    [*] バックパック、鞄、ポーチ、財布、矢筒、貯金箱、グリモアなどの携帯コンテナ。
+    [/list]
+    商人の箱、NPC所有物、プレイヤー所有ではないコンテナは対象外です。
+
+    [h1] 使い方 [/h1]
+    対応するレンチをプレイヤー所有コンテナまたはプレイヤーインベントリに使用してください。無料の便利な変更には、プレイヤーまたは対応コンテナを中クリックして Container Upgrades コンテキストメニューを開いてください。
+
+    [img] https://img.shields.io/badge/対応ゲームバージョン-EA%2023.295%20Stable-green [/img]
+  </description>
+  <tags>Balance, Cheat</tags>
+  <visibility>Public</visibility>
+  <version>0.23.295</version>
+</Meta>
