@@ -6,14 +6,14 @@
   <loadPriority>100</loadPriority>
   <description>
     Expands container upgrade options for player-owned storage and the player inventory.
-    プレイヤー所有の収納とプレイヤーインベントリのアップグレード機能を拡張します。
+    プレイヤー所有の収納とプレイヤーインベントリで使えるコンテナ強化を拡張します。
 
     [h1] Features [/h1]
     [list]
     [*] Lets width, height, storage, and cooling wrenches work on supported player-owned containers.
     [*] Lets supported wrench upgrades target the player inventory.
     [*] Removes the normal wrench upgrade limit for supported upgrade targets.
-    [*] Adds free middle-click context-menu actions for quick container resizing, cooling, and icon changes.
+    [*] Adds free middle-click context-menu actions for player inventory upgrades and quick container resizing, cooling, and icon changes.
     [/list]
 
     [h1] Affected Containers [/h1]
@@ -27,16 +27,16 @@
     Merchant chests, NPC property, and non-player-owned containers are not affected.
 
     [h1] Usage [/h1]
-    Use supported wrenches on player-owned containers or the player inventory. Middle-click the player or a supported container to open the Container Upgrades context menu for free convenience changes.
+    Use supported wrenches on player-owned containers or the player inventory. Middle-click the player character for player inventory upgrades, or middle-click a supported container for free container convenience changes.
 
     [img] https://img.shields.io/badge/Supports%20Game%20Version-EA%2023.295%20Stable-green [/img]
 
     [h1] 特徴 [/h1]
     [list]
-    [*] 幅、高さ、収納、冷却のレンチを、対応するプレイヤー所有コンテナに使えるようにします。
-    [*] 対応するレンチアップグレードをプレイヤーインベントリにも適用できます。
-    [*] 対応するアップグレード対象では、通常のレンチアップグレード上限をなくします。
-    [*] コンテナのサイズ変更、冷却、アイコン変更をすばやく行える無料の中クリックコンテキストメニューアクションを追加します。
+    [*] 幅、高さ、容量、冷却のレンチを、対応するプレイヤー所有コンテナに使えるようにします。
+    [*] 対応するレンチ強化をプレイヤーインベントリにも適用できるようにします。
+    [*] 対応する強化対象では、通常のレンチ強化上限をなくします。
+    [*] プレイヤーインベントリの強化や、コンテナのサイズ変更、冷却、アイコン変更をすばやく行える無料の中クリックコンテキストメニューアクションを追加します。
     [/list]
 
     [h1] 対象コンテナ [/h1]
@@ -50,7 +50,7 @@
     商人の箱、NPC所有物、プレイヤー所有ではないコンテナは対象外です。
 
     [h1] 使い方 [/h1]
-    対応するレンチをプレイヤー所有コンテナまたはプレイヤーインベントリに使用してください。無料の便利な変更には、プレイヤーまたは対応コンテナを中クリックして Container Upgrades コンテキストメニューを開いてください。
+    対応するレンチをプレイヤー所有コンテナまたはプレイヤーインベントリに使用してください。プレイヤーインベントリの強化にはプレイヤーキャラクターを中クリックし、コンテナの便利な変更には対応コンテナを中クリックしてください。
 
     [img] https://img.shields.io/badge/対応ゲームバージョン-EA%2023.295%20Stable-green [/img]
   </description>

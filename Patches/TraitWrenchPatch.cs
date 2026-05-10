@@ -49,6 +49,11 @@ internal static class TraitWrenchPatch
             lang: Localization.UpgradeInventory.lang(),
             onPerform: delegate
             {
+                if (EClass.pc == null)
+                {
+                    return false;
+                }
+
                 if (ContainerUpgradeActions.TryApplyPlayerWrenchUpgrade(wrench: wrench))
                 {
                     Msg.Say(idLang: "upgrade", c1: EClass.pc, ref1: wrench.owner.GetName(style: NameStyle.Full, num: 1), ref2: null, ref3: null);

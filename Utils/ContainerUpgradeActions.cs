@@ -8,6 +8,7 @@ internal enum ContainerResizeAction
     IncreaseWidth,
     IncreaseHeight,
     IncreaseCapacity,
+    DecreaseCapacity,
     DecreaseWidth,
     DecreaseHeight,
     ResetSize,
@@ -87,6 +88,11 @@ internal static class ContainerUpgradeActions
             return false;
         }
 
+        if (EClass.pc == null)
+        {
+            return false;
+        }
+
         ThingContainer things = EClass.pc.things;
         switch (wrench.ID)
         {
@@ -119,6 +125,8 @@ internal static class ContainerUpgradeActions
                 return TryResizeContainer(target: target, width: target.things.width, height: target.things.height + step);
             case ContainerResizeAction.IncreaseCapacity:
                 return TryIncreaseCapacity(target: target, amount: step);
+            case ContainerResizeAction.DecreaseCapacity:
+                return TryDecreaseCapacity(target: target, amount: step);
             case ContainerResizeAction.DecreaseWidth:
                 return TryResizeContainer(target: target, width: target.things.width - step, height: target.things.height);
             case ContainerResizeAction.DecreaseHeight:
@@ -134,6 +142,11 @@ internal static class ContainerUpgradeActions
 
     internal static bool TryApplyPlayerMenuAction(ContainerResizeAction action)
     {
+        if (EClass.pc == null)
+        {
+            return false;
+        }
+
         int step = MenuResizeStep;
         ThingContainer things = EClass.pc.things;
         switch (action)
@@ -144,12 +157,14 @@ internal static class ContainerUpgradeActions
                 return TryResizePlayerInventory(width: things.width, height: things.height + step);
             case ContainerResizeAction.IncreaseCapacity:
                 return TryIncreasePlayerCapacity(amount: step);
+            case ContainerResizeAction.DecreaseCapacity:
+                return TryDecreasePlayerCapacity(amount: step);
             case ContainerResizeAction.DecreaseWidth:
                 return TryResizePlayerInventory(width: things.width - step, height: things.height);
             case ContainerResizeAction.DecreaseHeight:
                 return TryResizePlayerInventory(width: things.width, height: things.height - step);
             case ContainerResizeAction.ResetSize:
-                return TryResizePlayerInventory(width: PlayerDefaultWidth, height: PlayerDefaultHeight);
+                return TryResetPlayerInventory();
             case ContainerResizeAction.ToggleCooling:
                 return TryTogglePlayerCooling();
             default:
@@ -169,17 +184,23 @@ internal static class ContainerUpgradeActions
             return false;
         }
 
+        Trait trait = target.trait;
+        if (trait == null)
+        {
+            return false;
+        }
+
+        if (trait.IsContainer == false)
+        {
+            return false;
+        }
+
         if (target.IsContainer == false)
         {
             return false;
         }
 
-        if (target.trait == null || target.trait.IsContainer == false)
-        {
-            return false;
-        }
-
-        if (target.trait is TraitChestMerchant)
+        if (trait is TraitChestMerchant)
         {
             return false;
         }
@@ -195,7 +216,7 @@ internal static class ContainerUpgradeActions
             return true;
         }
 
-        if (target.IsInstalled && EClass._zone != null && EClass._zone.IsPCFaction)
+        if (target.IsInstalled && target.GetRoot() is Zone zone && zone.IsPCFaction)
         {
             return true;
         }
@@ -217,6 +238,11 @@ internal static class ContainerUpgradeActions
         }
 
         if (owner.c_containerUpgrade.cool <= 0)
+        {
+            return false;
+        }
+
+        if (trait is TraitMagicChest && owner.isOn == false)
         {
             return false;
         }
@@ -289,6 +315,78 @@ internal static class ContainerUpgradeActions
         return TryResizePlayerInventory(width: width, height: desiredHeight);
     }
 
+    private static bool TryDecreaseCapacity(Thing target, int amount)
+    {
+        if (amount <= 0)
+        {
+            return false;
+        }
+
+        if (target.trait is TraitMagicChest)
+        {
+            if (target.c_containerUpgrade.cap <= 0)
+            {
+                return false;
+            }
+
+            int newCapacityBonus = target.c_containerUpgrade.cap - amount;
+            if (newCapacityBonus < 0)
+            {
+                newCapacityBonus = 0;
+            }
+
+            if (CanSetMagicChestCapacityBonus(target: target, capacityBonus: newCapacityBonus) == false)
+            {
+                return false;
+            }
+
+            target.c_containerUpgrade.cap = newCapacityBonus;
+            RefreshAfterChange(target: target);
+            return true;
+        }
+
+        return TryDecreaseGridRows(things: target.things, refreshTarget: target, rows: amount);
+    }
+
+    private static bool TryDecreasePlayerCapacity(int amount)
+    {
+        if (amount <= 0)
+        {
+            return false;
+        }
+
+        return TryDecreaseGridRows(things: EClass.pc.things, refreshTarget: EClass.pc.Thing, rows: amount);
+    }
+
+    private static bool TryDecreaseGridRows(ThingContainer things, Thing refreshTarget, int rows)
+    {
+        int width = things.width;
+        if (width <= 0)
+        {
+            return false;
+        }
+
+        if (rows <= 0)
+        {
+            return false;
+        }
+
+        int desiredHeight = things.height - rows;
+        if (desiredHeight <= 0)
+        {
+            return false;
+        }
+
+        if (CanResize(things: things, width: width, height: desiredHeight, blockByVisibleItems: true) == false)
+        {
+            return false;
+        }
+
+        things.ChangeSize(w: width, h: desiredHeight);
+        RefreshAfterChange(target: refreshTarget);
+        return true;
+    }
+
     private static bool TryResetContainerSize(Thing target)
     {
         TraitBaseContainer? trait = target.trait as TraitBaseContainer;
@@ -297,7 +395,71 @@ internal static class ContainerUpgradeActions
             return false;
         }
 
-        return TryResizeContainer(target: target, width: trait.Width, height: trait.Height);
+        if (target.trait is TraitMagicChest)
+        {
+            if (CanSetMagicChestCapacityBonus(target: target, capacityBonus: 0) == false)
+            {
+                return false;
+            }
+
+            if (CanResize(things: target.things, width: trait.Width, height: trait.Height, blockByVisibleItems: false) == false)
+            {
+                return false;
+            }
+
+            target.c_containerUpgrade.cap = 0;
+            SetCoolingState(target: target, enabled: false);
+            target.things.ChangeSize(w: trait.Width, h: trait.Height);
+            RefreshAfterChange(target: target);
+            return true;
+        }
+
+        if (CanResize(things: target.things, width: trait.Width, height: trait.Height, blockByVisibleItems: true) == false)
+        {
+            return false;
+        }
+
+        target.c_containerUpgrade.cap = 0;
+        SetCoolingState(target: target, enabled: false);
+        target.things.ChangeSize(w: trait.Width, h: trait.Height);
+        RefreshAfterChange(target: target);
+        return true;
+    }
+
+    private static bool TryResetPlayerInventory()
+    {
+        if (EClass.pc == null)
+        {
+            return false;
+        }
+
+        if (CanResize(things: EClass.pc.things, width: PlayerDefaultWidth, height: PlayerDefaultHeight, blockByVisibleItems: true) == false)
+        {
+            return false;
+        }
+
+        EClass.pc.c_containerUpgrade.cap = 0;
+        SetCoolingState(target: EClass.pc, enabled: false);
+        EClass.pc.things.ChangeSize(w: PlayerDefaultWidth, h: PlayerDefaultHeight);
+        RefreshAfterChange(target: EClass.pc.Thing);
+        return true;
+    }
+
+    private static bool CanSetMagicChestCapacityBonus(Thing target, int capacityBonus)
+    {
+        if (capacityBonus < 0)
+        {
+            return false;
+        }
+
+        int baseCapacity = target.things.MaxCapacity - target.c_containerUpgrade.cap;
+        int maxCapacity = baseCapacity + capacityBonus;
+        if (target.things.Count > maxCapacity)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private static bool TryToggleCooling(Thing target)
@@ -358,6 +520,12 @@ internal static class ContainerUpgradeActions
 
     private static void ApplyCooling(Card target, Thing refreshTarget, bool enabled)
     {
+        SetCoolingState(target: target, enabled: enabled);
+        RefreshAfterChange(target: refreshTarget);
+    }
+
+    private static void SetCoolingState(Card target, bool enabled)
+    {
         int cool = 0;
         int elementValue = 0;
         if (enabled)
@@ -368,7 +536,6 @@ internal static class ContainerUpgradeActions
 
         target.c_containerUpgrade.cool = cool;
         target.elements.SetBase(id: 405, v: elementValue, potential: 0);
-        RefreshAfterChange(target: refreshTarget);
     }
 
     private static bool TryResizeContainer(Thing target, int width, int height)
@@ -472,6 +639,11 @@ internal static class ContainerUpgradeActions
         }
         else
         {
+            if (EClass.pc == null)
+            {
+                return;
+            }
+
             EClass.pc.PlayEffect(id: "buff", useRenderPos: true, range: 0f, fix: default(Vector3));
         }
     }

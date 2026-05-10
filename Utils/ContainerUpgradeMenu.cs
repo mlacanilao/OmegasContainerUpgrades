@@ -13,17 +13,30 @@ internal static class ContainerUpgradeMenu
 
     internal static void ShowPlayerInventoryMenu()
     {
+        if (EClass.pc == null)
+        {
+            SE.Beep();
+            return;
+        }
+
         ShowUpgradeMenu(context: UpgradeMenuContext.ForPlayer());
     }
 
     private static void ShowUpgradeMenu(UpgradeMenuContext context)
     {
+        if (context.IsValid == false)
+        {
+            SE.Beep();
+            return;
+        }
+
         UIContextMenu menu = EClass.ui.CreateContextMenu(cid: "ContextMenu");
         UpgradeMenuState state = new UpgradeMenuState(context: context);
         AddMenuHeader(menu: menu);
         state.IncreaseWidthButton = AddUpgradeButton(menu: menu, state: state, action: ContainerResizeAction.IncreaseWidth);
         state.IncreaseHeightButton = AddUpgradeButton(menu: menu, state: state, action: ContainerResizeAction.IncreaseHeight);
         state.IncreaseCapacityButton = AddUpgradeButton(menu: menu, state: state, action: ContainerResizeAction.IncreaseCapacity);
+        state.DecreaseCapacityButton = AddUpgradeButton(menu: menu, state: state, action: ContainerResizeAction.DecreaseCapacity);
         state.DecreaseWidthButton = AddUpgradeButton(menu: menu, state: state, action: ContainerResizeAction.DecreaseWidth);
         state.DecreaseHeightButton = AddUpgradeButton(menu: menu, state: state, action: ContainerResizeAction.DecreaseHeight);
         state.ResetSizeButton = AddUpgradeButton(menu: menu, state: state, action: ContainerResizeAction.ResetSize);
@@ -60,6 +73,16 @@ internal static class ContainerUpgradeMenu
         return context.GridNameAddsSlotsTooltip;
     }
 
+    private static string GetDecreaseCapacityTooltip(UpgradeMenuContext context)
+    {
+        if (context.Target != null && context.Target.trait is TraitMagicChest)
+        {
+            return Localization.TooltipRemovesMagicChestCapacity.lang();
+        }
+
+        return context.GridNameRemovesSlotsTooltip;
+    }
+
     private static string GetCoolingTooltip(UpgradeMenuContext context)
     {
         if (context.CoolingEnabled)
@@ -75,17 +98,19 @@ internal static class ContainerUpgradeMenu
         switch (action)
         {
             case ContainerResizeAction.IncreaseWidth:
-                return Localization.IncreaseWidth.lang(context.Things.width.ToString(), null, null, null, null);
+                return Localization.IncreaseWidth.lang(ref1: context.Things.width.ToString(), ref2: null, ref3: null, ref4: null, ref5: null);
             case ContainerResizeAction.IncreaseHeight:
-                return Localization.IncreaseHeight.lang(context.Things.height.ToString(), null, null, null, null);
+                return Localization.IncreaseHeight.lang(ref1: context.Things.height.ToString(), ref2: null, ref3: null, ref4: null, ref5: null);
             case ContainerResizeAction.IncreaseCapacity:
-                return Localization.IncreaseCapacity.lang(context.Things.MaxCapacity.ToString(), null, null, null, null);
+                return Localization.IncreaseCapacity.lang(ref1: context.Things.MaxCapacity.ToString(), ref2: null, ref3: null, ref4: null, ref5: null);
+            case ContainerResizeAction.DecreaseCapacity:
+                return Localization.DecreaseCapacity.lang(ref1: context.Things.MaxCapacity.ToString(), ref2: null, ref3: null, ref4: null, ref5: null);
             case ContainerResizeAction.DecreaseWidth:
-                return Localization.DecreaseWidth.lang(context.Things.width.ToString(), null, null, null, null);
+                return Localization.DecreaseWidth.lang(ref1: context.Things.width.ToString(), ref2: null, ref3: null, ref4: null, ref5: null);
             case ContainerResizeAction.DecreaseHeight:
-                return Localization.DecreaseHeight.lang(context.Things.height.ToString(), null, null, null, null);
+                return Localization.DecreaseHeight.lang(ref1: context.Things.height.ToString(), ref2: null, ref3: null, ref4: null, ref5: null);
             case ContainerResizeAction.ResetSize:
-                return Localization.ResetSize.lang(context.Things.width.ToString() + "x" + context.Things.height.ToString(), null, null, null, null);
+                return Localization.ResetSize.lang(ref1: context.Things.width.ToString() + "x" + context.Things.height.ToString(), ref2: null, ref3: null, ref4: null, ref5: null);
             case ContainerResizeAction.ToggleCooling:
                 return GetCoolingLabel(context: context);
             default:
@@ -103,6 +128,8 @@ internal static class ContainerUpgradeMenu
                 return context.GridNameAddsRowsTooltip;
             case ContainerResizeAction.IncreaseCapacity:
                 return GetCapacityTooltip(context: context);
+            case ContainerResizeAction.DecreaseCapacity:
+                return GetDecreaseCapacityTooltip(context: context);
             case ContainerResizeAction.DecreaseWidth:
                 return context.GridNameRemovesColumnsTooltip;
             case ContainerResizeAction.DecreaseHeight:
@@ -137,7 +164,7 @@ internal static class ContainerUpgradeMenu
             return;
         }
 
-        UIContextMenu iconMenu = menu.AddChild(Localization.ChangeIcon.lang(GetContainerIconLabel(target: target), null, null, null, null));
+        UIContextMenu iconMenu = menu.AddChild(idLang: Localization.ChangeIcon.lang(ref1: GetContainerIconLabel(target: target), ref2: null, ref3: null, ref4: null, ref5: null));
         state.ChangeIconMenu = iconMenu;
         if (iconMenu.popper != null)
         {
@@ -157,7 +184,7 @@ internal static class ContainerUpgradeMenu
             UIButton button = Util.Instantiate<UIButton>(path: "UI/Element/Button/ButtonContainerIcon", parent: parent);
             int iconIndex = index;
             button.icon.sprite = sprite;
-            SetTooltip(button: button, text: Localization.TooltipSetIcon.lang(iconIndex.ToString(), null, null, null, null));
+            SetTooltip(button: button, text: Localization.TooltipSetIcon.lang(ref1: iconIndex.ToString(), ref2: null, ref3: null, ref4: null, ref5: null));
             button.SetOnClick(action: delegate
             {
                 SetContainerIcon(state: state, target: target, iconIndex: iconIndex);
@@ -172,6 +199,7 @@ internal static class ContainerUpgradeMenu
         RefreshUpgradeButton(button: state.IncreaseWidthButton, label: GetUpgradeLabel(context: context, action: ContainerResizeAction.IncreaseWidth), tooltip: GetUpgradeTooltip(context: context, action: ContainerResizeAction.IncreaseWidth));
         RefreshUpgradeButton(button: state.IncreaseHeightButton, label: GetUpgradeLabel(context: context, action: ContainerResizeAction.IncreaseHeight), tooltip: GetUpgradeTooltip(context: context, action: ContainerResizeAction.IncreaseHeight));
         RefreshUpgradeButton(button: state.IncreaseCapacityButton, label: GetUpgradeLabel(context: context, action: ContainerResizeAction.IncreaseCapacity), tooltip: GetUpgradeTooltip(context: context, action: ContainerResizeAction.IncreaseCapacity));
+        RefreshUpgradeButton(button: state.DecreaseCapacityButton, label: GetUpgradeLabel(context: context, action: ContainerResizeAction.DecreaseCapacity), tooltip: GetUpgradeTooltip(context: context, action: ContainerResizeAction.DecreaseCapacity));
         RefreshUpgradeButton(button: state.DecreaseWidthButton, label: GetUpgradeLabel(context: context, action: ContainerResizeAction.DecreaseWidth), tooltip: GetUpgradeTooltip(context: context, action: ContainerResizeAction.DecreaseWidth));
         RefreshUpgradeButton(button: state.DecreaseHeightButton, label: GetUpgradeLabel(context: context, action: ContainerResizeAction.DecreaseHeight), tooltip: GetUpgradeTooltip(context: context, action: ContainerResizeAction.DecreaseHeight));
         RefreshUpgradeButton(button: state.ResetSizeButton, label: GetUpgradeLabel(context: context, action: ContainerResizeAction.ResetSize), tooltip: GetUpgradeTooltip(context: context, action: ContainerResizeAction.ResetSize));
@@ -190,7 +218,7 @@ internal static class ContainerUpgradeMenu
             return;
         }
 
-        menu.popper.textName.text = Localization.ChangeIcon.lang(GetContainerIconLabel(target: target), null, null, null, null);
+        menu.popper.textName.text = Localization.ChangeIcon.lang(ref1: GetContainerIconLabel(target: target), ref2: null, ref3: null, ref4: null, ref5: null);
     }
 
     private static void RefreshUpgradeButton(UIButton? button, string label, string tooltip)
@@ -221,6 +249,12 @@ internal static class ContainerUpgradeMenu
 
     private static void SetContainerIcon(UpgradeMenuState state, Thing target, int iconIndex)
     {
+        if (ContainerUpgradeActions.IsPlayerOwnedContainer(target: target) == false)
+        {
+            SE.Beep();
+            return;
+        }
+
         target.c_indexContainerIcon = iconIndex;
         ContainerUpgradeActions.RefreshAfterChange(target: target);
         SE.ClickOk();
@@ -247,7 +281,7 @@ internal static class ContainerUpgradeMenu
         button.tooltip.text = text;
         button.tooltip.enable = true;
         button.tooltip.icon = true;
-        button.tooltip.offset = new UnityEngine.Vector3(0f, 48f, 0f);
+        button.tooltip.offset = new UnityEngine.Vector3(x: 0f, y: 48f, z: 0f);
         AddTooltipPointerHandlers(button: button);
     }
 
@@ -326,6 +360,8 @@ internal static class ContainerUpgradeMenu
 
         internal UIButton? IncreaseCapacityButton { get; set; }
 
+        internal UIButton? DecreaseCapacityButton { get; set; }
+
         internal UIButton? DecreaseWidthButton { get; set; }
 
         internal UIButton? DecreaseHeightButton { get; set; }
@@ -339,16 +375,32 @@ internal static class ContainerUpgradeMenu
 
     private readonly struct UpgradeMenuContext
     {
-        private UpgradeMenuContext(Thing? target, ThingContainer things, bool isPlayer)
+        private readonly ThingContainer? things;
+
+        private UpgradeMenuContext(Thing? target, ThingContainer? things, bool isPlayer)
         {
             Target = target;
-            Things = things;
+            this.things = things;
             IsPlayer = isPlayer;
         }
 
         internal Thing? Target { get; }
 
-        internal ThingContainer Things { get; }
+        internal ThingContainer Things
+        {
+            get
+            {
+                return things!;
+            }
+        }
+
+        internal bool IsValid
+        {
+            get
+            {
+                return things != null;
+            }
+        }
 
         internal bool CoolingEnabled
         {
@@ -435,6 +487,19 @@ internal static class ContainerUpgradeMenu
             }
         }
 
+        internal string GridNameRemovesSlotsTooltip
+        {
+            get
+            {
+                if (IsPlayer)
+                {
+                    return Localization.TooltipRemovesPlayerSlots.lang();
+                }
+
+                return Localization.TooltipRemovesContainerSlots.lang();
+            }
+        }
+
         internal string ResetTooltip
         {
             get
@@ -481,6 +546,11 @@ internal static class ContainerUpgradeMenu
 
         internal static UpgradeMenuContext ForPlayer()
         {
+            if (EClass.pc == null)
+            {
+                return new UpgradeMenuContext(target: null, things: null, isPlayer: true);
+            }
+
             return new UpgradeMenuContext(target: null, things: EClass.pc.things, isPlayer: true);
         }
     }

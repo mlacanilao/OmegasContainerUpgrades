@@ -8,6 +8,7 @@ internal static class Localization
     internal const string IncreaseWidth = "ocuIncreaseWidth";
     internal const string IncreaseHeight = "ocuIncreaseHeight";
     internal const string IncreaseCapacity = "ocuIncreaseCapacity";
+    internal const string DecreaseCapacity = "ocuDecreaseCapacity";
     internal const string DecreaseWidth = "ocuDecreaseWidth";
     internal const string DecreaseHeight = "ocuDecreaseHeight";
     internal const string ResetSize = "ocuResetSize";
@@ -27,6 +28,9 @@ internal static class Localization
     internal const string TooltipRemovesPlayerColumns = "ocuTooltipRemovesPlayerColumns";
     internal const string TooltipRemovesContainerRows = "ocuTooltipRemovesContainerRows";
     internal const string TooltipRemovesPlayerRows = "ocuTooltipRemovesPlayerRows";
+    internal const string TooltipRemovesContainerSlots = "ocuTooltipRemovesContainerSlots";
+    internal const string TooltipRemovesPlayerSlots = "ocuTooltipRemovesPlayerSlots";
+    internal const string TooltipRemovesMagicChestCapacity = "ocuTooltipRemovesMagicChestCapacity";
     internal const string TooltipResetContainerSize = "ocuTooltipResetContainerSize";
     internal const string TooltipResetPlayerSize = "ocuTooltipResetPlayerSize";
     internal const string TooltipEnableContainerCooling = "ocuTooltipEnableContainerCooling";
