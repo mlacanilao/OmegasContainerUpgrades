@@ -29,7 +29,9 @@
     [h1] Usage [/h1]
     Use supported wrenches on player-owned containers or the player inventory. Middle-click the player character for player inventory upgrades, or middle-click a supported container for free container convenience changes.
 
-    [img] https://img.shields.io/badge/Supports%20Game%20Version-EA%2023.295%20Stable-green [/img]
+    Enable Context Menu (default: true) controls the free upgrade entries for carried containers, installed containers, and the player inventory. Change it in Mod Config on supported game versions, or in the BepInEx .cfg file. Wrench upgrades and saved upgrades are unaffected. Please review this new setting after updating.
+
+    [img] https://img.shields.io/badge/Supports%20Game%20Version-EA%2023.352%20Patch%201%20Stable-green [/img]
 
     [h1] 特徴 [/h1]
     [list]
@@ -52,9 +54,11 @@
     [h1] 使い方 [/h1]
     対応するレンチをプレイヤー所有コンテナまたはプレイヤーインベントリに使用してください。プレイヤーインベントリの強化にはプレイヤーキャラクターを中クリックし、コンテナの便利な変更には対応コンテナを中クリックしてください。
 
-    [img] https://img.shields.io/badge/対応ゲームバージョン-EA%2023.295%20Stable-green [/img]
+    Enable Context Menu（既定値: true）は、携帯中のコンテナ、設置済みコンテナ、プレイヤーインベントリの無料強化メニュー項目を表示するかどうかを設定します。対応するゲームバージョンでは Mod Config から、それ以外では BepInEx の .cfg ファイルから変更できます。レンチによる強化と保存済みの強化には影響しません。更新後は、この新しい設定をご確認ください。
+
+    [img] https://img.shields.io/badge/対応ゲームバージョン-EA%2023.352%20Patch%201%20Stable-green [/img]
   </description>
   <tags>Balance, Cheat</tags>
   <visibility>Public</visibility>
-  <version>0.23.295</version>
+  <version>0.23.352</version>
 </Meta>

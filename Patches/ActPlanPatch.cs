@@ -4,6 +4,11 @@ internal static class ActPlanPatch
 {
     internal static void UpdatePostfix(ActPlan plan)
     {
+        if (OmegasContainerUpgradesConfig.EnableContextMenu.Value == false)
+        {
+            return;
+        }
+
         if (plan == null)
         {
             return;

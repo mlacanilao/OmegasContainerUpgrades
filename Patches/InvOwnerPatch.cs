@@ -8,6 +8,11 @@ internal static class InvOwnerPatch
         ButtonGrid b,
         bool context)
     {
+        if (OmegasContainerUpgradesConfig.EnableContextMenu.Value == false)
+        {
+            return;
+        }
+
         if (context == false)
         {
             return;

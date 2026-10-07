@@ -19,6 +19,7 @@ internal class OmegasContainerUpgrades : BaseUnityPlugin
     private void Awake()
     {
         Instance = this;
+        OmegasContainerUpgradesConfig.LoadConfig(config: Config);
         Harmony.CreateAndPatchAll(type: typeof(Patcher), harmonyInstanceId: ModInfo.Guid);
     }
 

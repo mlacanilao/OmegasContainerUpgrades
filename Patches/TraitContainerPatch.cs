@@ -4,6 +4,11 @@ internal static class TraitContainerPatch
 {
     internal static void TrySetActPostfix(TraitContainer trait, ActPlan p)
     {
+        if (OmegasContainerUpgradesConfig.EnableContextMenu.Value == false)
+        {
+            return;
+        }
+
         if (p == null)
         {
             return;

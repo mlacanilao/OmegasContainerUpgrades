@@ -24,6 +24,11 @@ internal static class ContainerUpgradeMenu
 
     private static void ShowUpgradeMenu(UpgradeMenuContext context)
     {
+        if (OmegasContainerUpgradesConfig.EnableContextMenu.Value == false)
+        {
+            return;
+        }
+
         if (context.IsValid == false)
         {
             SE.Beep();
